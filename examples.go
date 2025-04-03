@@ -20,7 +20,7 @@ func main() {
 		"123": "123",
 	})
 
-	// tranzactions
+	// transactions
 	log := plentylog.NewLog(plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON}))
 
 	go func() {
