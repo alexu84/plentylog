@@ -1,13 +1,11 @@
 package plentylog
 
 import (
-	"time"
-
 	"github.com/rs/xid"
 )
 
 type PlentyLogTransaction struct {
-	plentyLog
+	// plentyLog
 	id string
 }
 
@@ -18,14 +16,14 @@ func (pl *PlentyLog) NewTransaction() *PlentyLogTransaction {
 }
 
 func (plt *PlentyLogTransaction) Debug(metadata PlentyLogMetadata) error {
-	log := plentyLog{
-		transactionID: plt.id,
-		level:         plentyLogLevelDebug,
-		timestamp:     time.Now(),
-		metadata:      []PlentyLogMetadata{metadata},
-	}
+	// log := plentyLog{
+	// 	transactionID: plt.id,
+	// 	level:         plentyLogLevelDebug,
+	// 	timestamp:     time.Now(),
+	// 	metadata:      []PlentyLogMetadata{metadata},
+	// }
 
-	plt.plentyLog.metadata = append(plt.plentyLog.metadata, log)
+	// plt.plentyLog.metadata = append(plt.plentyLog.metadata, log)
 
 	return nil
 }

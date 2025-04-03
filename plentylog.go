@@ -5,12 +5,12 @@ import (
 )
 
 type plentyLogProvider interface {
-	Write(<-chan plentyLog) error
+	// Write(<-chan plentyLog) error
 }
 
 type PlentyLog struct {
 	provider plentyLogProvider
-	logs     chan<- plentyLog
+	logs     chan plentyLog
 }
 
 type PlentyLogMetadata map[string]any
@@ -31,13 +31,15 @@ type plentyLog struct {
 	metadata      PlentyLogMetadata
 }
 
-func NewPlentyLog(provider plentyLogProvider) *PlentyLog {
-	pl := PlentyLog{}
+func NewPlentyLog(provider *plentyLogProvider) *PlentyLog {
+	pl := PlentyLog{
+		logs: make(chan plentyLog),
+	}
 
 	if provider != nil {
 		pl.provider = provider
 	} else {
-		pl.provider = &ProviderCLI{}
+		pl.provider = NewProviderCLI(pl.logs)
 	}
 
 	return &pl
@@ -52,5 +54,5 @@ func (pl *PlentyLog) Debug(metadata PlentyLogMetadata) error {
 
 	pl.logs <- log
 
-	return pl.provider.Write([]plentyLog{log})
+	return nil
 }
