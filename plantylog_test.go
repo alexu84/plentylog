@@ -2,7 +2,6 @@ package plentylog
 
 import (
 	"testing"
-	"time"
 )
 
 func TestDebug(t *testing.T) {
@@ -24,6 +23,4 @@ func TestDebug(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
-
-	time.Sleep(1 * time.Second)
 }
