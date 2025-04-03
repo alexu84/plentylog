@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"plentylog/elasticprovider"
 	"plentylog/plentylog"
 	"time"
 )
@@ -41,4 +42,19 @@ func main() {
 	}()
 
 	time.Sleep(2 * time.Second)
+
+	// elasticsearch external provider
+	esProvider, err := elasticprovider.NewElasticProvider(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	esLog := plentylog.NewLog(esProvider)
+
+	esLog.Debug("Debug message", plentylog.Metadata{"key": "value"})
+	esLog.Info("Info message", plentylog.Metadata{"key2": "value2"})
+	esLog.Error("Error message", plentylog.Metadata{"key3": "value3"})
+	esLog.Warning("Warn message", plentylog.Metadata{"key4": "value4"})
+
+	// view logs: https://localhost:9200/logs/_search
 }

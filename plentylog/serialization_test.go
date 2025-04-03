@@ -11,12 +11,12 @@ func TestTextSerialization(t *testing.T) {
 
 	tests := []struct {
 		name string
-		log  log
+		log  Record
 		want string
 	}{
 		{
 			name: "basic log",
-			log: log{
+			log: Record{
 				Timestamp: testTime,
 				Level:     "INFO",
 				Message:   "test message",
@@ -26,7 +26,7 @@ func TestTextSerialization(t *testing.T) {
 		},
 		{
 			name: "log with metadata",
-			log: log{
+			log: Record{
 				Timestamp: testTime,
 				Level:     "DEBUG",
 				Message:   "another message",
@@ -36,7 +36,7 @@ func TestTextSerialization(t *testing.T) {
 		},
 		{
 			name: "log with transaction ID",
-			log: log{
+			log: Record{
 				Timestamp:     testTime,
 				Level:         "WARN",
 				Message:       "message with transaction id",
@@ -47,7 +47,7 @@ func TestTextSerialization(t *testing.T) {
 		},
 		{
 			name: "log with all fields",
-			log: log{
+			log: Record{
 				Timestamp:     testTime,
 				Level:         "ERROR",
 				Message:       "full log",
@@ -58,7 +58,7 @@ func TestTextSerialization(t *testing.T) {
 		},
 		{
 			name: "empty message",
-			log: log{
+			log: Record{
 				Timestamp: testTime,
 				Level:     "INFO",
 				Message:   "",
@@ -68,7 +68,7 @@ func TestTextSerialization(t *testing.T) {
 		},
 		{
 			name: "metadata with special characters",
-			log: log{
+			log: Record{
 				Timestamp: testTime,
 				Level:     "INFO",
 				Message:   "test message",

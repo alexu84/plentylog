@@ -12,7 +12,7 @@ import (
 type ProviderFile struct {
 	opts   ProviderFileOptions
 	mu     sync.Mutex
-	logs   chan log
+	logs   chan Record
 	errors chan error
 }
 
@@ -49,7 +49,7 @@ func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 	pf := ProviderFile{
 		opts:   *opts,
 		mu:     sync.Mutex{},
-		logs:   make(chan log, 100),
+		logs:   make(chan Record, 100),
 		errors: make(chan error, 100),
 	}
 
@@ -59,7 +59,7 @@ func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 	return &pf
 }
 
-func (p *ProviderFile) Write(_ context.Context, l log) {
+func (p *ProviderFile) Write(_ context.Context, l Record) {
 	p.logs <- l
 }
 

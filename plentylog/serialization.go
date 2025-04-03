@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func textSerialization(l log) string {
+func textSerialization(l Record) string {
 	var buffer bytes.Buffer
 
 	buffer.WriteString(l.Timestamp.Format("2006-01-02 15:04:05"))
@@ -35,7 +35,7 @@ func textSerialization(l log) string {
 	return buffer.String()
 }
 
-func jsonSerialization(l log) (*string, error) {
+func jsonSerialization(l Record) (*string, error) {
 	jsonBytes, err := json.Marshal(l)
 	if err != nil {
 		return nil, err

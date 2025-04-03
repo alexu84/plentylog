@@ -10,7 +10,7 @@ import (
 type Transaction struct {
 	*Log
 	id   string
-	logs []log
+	logs []Record
 }
 
 func (pl *Log) NewTransaction() *Transaction {
@@ -51,7 +51,7 @@ func (t *Transaction) Rollback() {
 }
 
 func (t *Transaction) addLog(lv level, message string, metadata Metadata) {
-	l := log{
+	l := Record{
 		TransactionID: t.id,
 		Message:       message,
 		Level:         lv,

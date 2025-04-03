@@ -6,7 +6,7 @@ import (
 )
 
 type Provider interface {
-	Write(context.Context, log)
+	Write(context.Context, Record)
 }
 
 type Log struct {
@@ -24,7 +24,7 @@ const (
 	levelError   level = "ERROR"
 )
 
-type log struct {
+type Record struct {
 	Timestamp     time.Time `json:"timestamp"`
 	Level         level     `json:"level"`
 	TransactionID string    `json:"transaction_id"`
@@ -77,7 +77,7 @@ func (pl *Log) ErrorWithContext(ctx context.Context, message string, metadata Me
 }
 
 func (pl *Log) writeLog(ctx context.Context, level level, message string, metadata Metadata) {
-	log := log{
+	log := Record{
 		Message:   message,
 		Level:     level,
 		Timestamp: time.Now(),

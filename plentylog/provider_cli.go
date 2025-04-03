@@ -11,6 +11,6 @@ func NewProviderCLI() *ProviderCLI {
 	return &ProviderCLI{}
 }
 
-func (p *ProviderCLI) Write(_ context.Context, l log) {
-	fmt.Println(textSerialization(l))
+func (p *ProviderCLI) Write(_ context.Context, r Record) {
+	fmt.Println(textSerialization(r))
 }
