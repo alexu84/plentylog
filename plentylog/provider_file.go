@@ -24,8 +24,8 @@ type ProviderFileOptions struct {
 type format string
 
 const (
-	formatJSON format = "json"
-	formatText format = "text"
+	FormatJSON format = "json"
+	FormatText format = "text"
 )
 
 func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
@@ -34,14 +34,14 @@ func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 	}
 
 	if opts.Format == "" {
-		opts.Format = formatText
+		opts.Format = FormatText
 	}
 
 	if opts.FilePath == "" {
 		switch opts.Format {
-		case formatJSON:
+		case FormatJSON:
 			opts.FilePath = "log.json"
-		case formatText:
+		case FormatText:
 			opts.FilePath = "log.txt"
 		}
 	}
@@ -82,7 +82,7 @@ func (p *ProviderFile) writeLogs() {
 
 			var sd string
 			switch p.opts.Format {
-			case formatJSON:
+			case FormatJSON:
 				s, err := jsonSerialization(l)
 				if err != nil {
 					p.errors <- err
@@ -94,7 +94,7 @@ func (p *ProviderFile) writeLogs() {
 				}
 
 				sd = *s
-			case formatText:
+			case FormatText:
 				sd = textSerialization(l)
 			default:
 				p.errors <- errors.New("unsupported serialization format")

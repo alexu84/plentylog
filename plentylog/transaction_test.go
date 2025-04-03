@@ -44,7 +44,7 @@ func TestTransaction_addLog(t *testing.T) {
 		},
 	}
 
-	pl := NewPlentyLog(nil)
+	pl := NewLog(nil)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

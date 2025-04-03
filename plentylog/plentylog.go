@@ -9,7 +9,7 @@ type Provider interface {
 	Write(context.Context, log)
 }
 
-type PlentyLog struct {
+type Log struct {
 	provider Provider
 }
 
@@ -32,8 +32,8 @@ type log struct {
 	Metadata      Metadata  `json:"metadata"`
 }
 
-func NewPlentyLog(provider Provider) *PlentyLog {
-	pl := PlentyLog{}
+func NewLog(provider Provider) *Log {
+	pl := Log{}
 
 	if provider != nil {
 		pl.provider = provider
@@ -44,39 +44,39 @@ func NewPlentyLog(provider Provider) *PlentyLog {
 	return &pl
 }
 
-func (pl *PlentyLog) Debug(message string, metadata Metadata) {
+func (pl *Log) Debug(message string, metadata Metadata) {
 	pl.writeLog(context.Background(), levelDebug, message, metadata)
 }
 
-func (pl *PlentyLog) DebugWithContext(ctx context.Context, message string, metadata Metadata) {
+func (pl *Log) DebugWithContext(ctx context.Context, message string, metadata Metadata) {
 	pl.writeLog(ctx, levelDebug, message, metadata)
 }
 
-func (pl *PlentyLog) Info(message string, metadata Metadata) {
+func (pl *Log) Info(message string, metadata Metadata) {
 	pl.writeLog(context.Background(), levelInfo, message, metadata)
 }
 
-func (pl *PlentyLog) InfoWithContext(ctx context.Context, message string, metadata Metadata) {
+func (pl *Log) InfoWithContext(ctx context.Context, message string, metadata Metadata) {
 	pl.writeLog(ctx, levelInfo, message, metadata)
 }
 
-func (pl *PlentyLog) Warning(message string, metadata Metadata) {
+func (pl *Log) Warning(message string, metadata Metadata) {
 	pl.writeLog(context.Background(), levelWarning, message, metadata)
 }
 
-func (pl *PlentyLog) WarningWithContext(ctx context.Context, message string, metadata Metadata) {
+func (pl *Log) WarningWithContext(ctx context.Context, message string, metadata Metadata) {
 	pl.writeLog(ctx, levelWarning, message, metadata)
 }
 
-func (pl *PlentyLog) Error(message string, metadata Metadata) {
+func (pl *Log) Error(message string, metadata Metadata) {
 	pl.writeLog(context.Background(), levelError, message, metadata)
 }
 
-func (pl *PlentyLog) ErrorWithContext(ctx context.Context, message string, metadata Metadata) {
+func (pl *Log) ErrorWithContext(ctx context.Context, message string, metadata Metadata) {
 	pl.writeLog(ctx, levelError, message, metadata)
 }
 
-func (pl *PlentyLog) writeLog(ctx context.Context, level level, message string, metadata Metadata) {
+func (pl *Log) writeLog(ctx context.Context, level level, message string, metadata Metadata) {
 	log := log{
 		Message:   message,
 		Level:     level,

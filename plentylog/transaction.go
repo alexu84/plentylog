@@ -8,17 +8,17 @@ import (
 )
 
 type Transaction struct {
-	*PlentyLog
+	*Log
 	id   string
 	logs []log
 }
 
-func (pl *PlentyLog) NewTransaction() *Transaction {
+func (pl *Log) NewTransaction() *Transaction {
 	t := Transaction{
 		id: xid.New().String(),
 	}
 
-	t.PlentyLog = pl
+	t.Log = pl
 
 	return &t
 }
@@ -41,7 +41,7 @@ func (t *Transaction) Error(message string, metadata Metadata) {
 
 func (t *Transaction) Commit(ctx context.Context) {
 	for _, log := range t.logs {
-		t.PlentyLog.provider.Write(ctx, log)
+		t.Log.provider.Write(ctx, log)
 	}
 }
 
