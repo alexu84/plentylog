@@ -39,15 +39,10 @@ func (t *Transaction) Error(message string, metadata Metadata) {
 	t.addLog(levelError, message, metadata)
 }
 
-func (t *Transaction) Commit(ctx context.Context) error {
+func (t *Transaction) Commit(ctx context.Context) {
 	for _, log := range t.logs {
-		err := t.PlentyLog.provider.Write(ctx, log)
-		if err != nil {
-			return err
-		}
+		t.PlentyLog.provider.Write(ctx, log)
 	}
-
-	return nil
 }
 
 func (t *Transaction) Rollback() {

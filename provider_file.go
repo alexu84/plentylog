@@ -59,10 +59,8 @@ func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 	return &pf
 }
 
-func (p *ProviderFile) Write(_ context.Context, l log) error {
+func (p *ProviderFile) Write(_ context.Context, l log) {
 	p.logs <- l
-
-	return nil
 }
 
 func (p *ProviderFile) writeLogs() {

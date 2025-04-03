@@ -15,10 +15,7 @@ func TestProviderTextFile(t *testing.T) {
 		tr.Debug("Debug message", Metadata{"key": "value"})
 		tr.Info("Info message", Metadata{"key2": "value2"})
 
-		err := tr.Commit(context.Background())
-		if err != nil {
-			t.Errorf("Error committing transaction: %v", err)
-		}
+		tr.Commit(context.Background())
 	}()
 
 	go func() {
@@ -27,10 +24,7 @@ func TestProviderTextFile(t *testing.T) {
 		tr.Debug("Debug message", Metadata{"key": "value"})
 		tr.Info("Info message", Metadata{"key2": "value2"})
 
-		err := tr.Commit(context.Background())
-		if err != nil {
-			t.Errorf("Error committing transaction: %v", err)
-		}
+		tr.Commit(context.Background())
 	}()
 
 	time.Sleep(2 * time.Second)
