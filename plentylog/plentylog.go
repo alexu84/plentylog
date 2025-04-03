@@ -11,6 +11,12 @@ type Provider interface {
 
 type Log struct {
 	provider Provider
+	config   *config
+}
+
+type LogOptions struct {
+	ConfigFile string
+	Provider   Provider
 }
 
 type Metadata map[string]any
@@ -32,14 +38,38 @@ type Record struct {
 	Metadata      Metadata  `json:"metadata"`
 }
 
-func NewLog(provider Provider) *Log {
+func NewLog(opts *LogOptions) *Log {
 	pl := Log{}
 
-	if provider != nil {
-		pl.provider = provider
-	} else {
-		pl.provider = NewProviderCLI()
+	if opts == nil {
+		opts = &LogOptions{}
 	}
+
+	if opts.Provider != nil {
+		pl.provider = opts.Provider
+
+		return &pl
+	}
+
+	if opts.ConfigFile == "" {
+		opts.ConfigFile = "config.yml"
+	}
+
+	c := loadConfig(opts.ConfigFile)
+	if c != nil {
+		switch c.InternalProvider {
+		case "file":
+			pl.provider = NewProviderFile(&ProviderFileOptions{Format: c.FileFormat})
+		case "cli":
+			pl.provider = NewProviderCLI()
+		default:
+			pl.provider = NewProviderCLI()
+		}
+
+		return &pl
+	}
+
+	pl.provider = NewProviderCLI()
 
 	return &pl
 }

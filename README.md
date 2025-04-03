@@ -4,6 +4,7 @@ The plentylog package provides a flexible logging solution in Go, allowing logs 
 
 ## Key components:
 
+- [plentylog/config.go](plentylog/config.go) - Defines the configuration structure for the logging system, including options for different providers and formats.
 - [plentylog/plentylog.go](plentylog/plentylog.go) - Defines the core logging functionality, including the Log struct, Provider interface, different log levels, and methods for writing logs with and without context.
 - [plentylog/provider_cli.go](plentylog/provider_cli.go) -  Implements a Provider that writes logs to the command line interface, using the textSerialization function to format the log message.
 - [plentylog/provider_file.go](plentylog/provider_file.go) - Implements a Provider that writes logs to a file in either JSON or text format. It uses channels and goroutines for asynchronous writing and error handling.
@@ -13,7 +14,7 @@ The plentylog package provides a flexible logging solution in Go, allowing logs 
 
 ## Example usage:
 
-Simple logger with internal cli provider
+Simple logger with internal cli provider and config from file
 
 ```go
 pl := plentylog.NewLog(nil)
@@ -31,7 +32,9 @@ pl.Debug("test message", plentylog.Metadata{
 Transactions with internal file provider
 
 ```go
-log := plentylog.NewLog(plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON}))
+provider := plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON})
+
+log := plentylog.NewLog(&plentylog.LogOptions{Provider: provider})
 
 go func() {
   tr := log.NewTransaction()
@@ -62,7 +65,7 @@ if err != nil {
   panic(err)
 }
 
-esLog := plentylog.NewLog(esProvider)
+esLog := plentylog.NewLog(&plentylog.LogOptions{Provider: esProvider})
 
 esLog.Debug("Debug message", plentylog.Metadata{"key": "value"})
 esLog.Info("Info message", plentylog.Metadata{"key2": "value2"})

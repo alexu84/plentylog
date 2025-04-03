@@ -21,7 +21,9 @@ func main() {
 	})
 
 	// transactions
-	log := plentylog.NewLog(plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON}))
+	provider := plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON})
+
+	log := plentylog.NewLog(&plentylog.LogOptions{Provider: provider})
 
 	go func() {
 		tr := log.NewTransaction()
@@ -49,12 +51,12 @@ func main() {
 		panic(err)
 	}
 
-	esLog := plentylog.NewLog(esProvider)
+	esLog := plentylog.NewLog(&plentylog.LogOptions{Provider: esProvider})
 
 	esLog.Debug("Debug message", plentylog.Metadata{"key": "value"})
 	esLog.Info("Info message", plentylog.Metadata{"key2": "value2"})
 	esLog.Error("Error message", plentylog.Metadata{"key3": "value3"})
 	esLog.Warning("Warn message", plentylog.Metadata{"key4": "value4"})
 
-	// view logs: https://localhost:9200/logs/_search
+	// // view logs: https://localhost:9200/logs/_search
 }
