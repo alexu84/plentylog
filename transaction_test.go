@@ -6,7 +6,6 @@ import (
 )
 
 func TestTransaction_addLog(t *testing.T) {
-
 	tests := []struct {
 		name     string
 		level    level
@@ -58,23 +57,23 @@ func TestTransaction_addLog(t *testing.T) {
 
 			log := transaction.logs[0]
 
-			if log.transactionID != transaction.id {
-				t.Errorf("Transaction ID does not match. got: %s, want: %s", log.transactionID, transaction.id)
+			if log.TransactionID != transaction.id {
+				t.Errorf("Transaction ID does not match. got: %s, want: %s", log.TransactionID, transaction.id)
 			}
 
-			if log.message != tt.message {
-				t.Errorf("Message does not match. got: %s, want: %s", log.message, tt.message)
+			if log.Message != tt.message {
+				t.Errorf("Message does not match. got: %s, want: %s", log.Message, tt.message)
 			}
 
-			if log.level != tt.level {
-				t.Errorf("Level does not match. got: %s, want: %s", log.level, tt.level)
+			if log.Level != tt.level {
+				t.Errorf("Level does not match. got: %s, want: %s", log.Level, tt.level)
 			}
 
-			if !reflect.DeepEqual(log.metadata, tt.metadata) {
-				t.Errorf("Metadata does not match. got: %v, want: %v", log.metadata, tt.metadata)
+			if !reflect.DeepEqual(log.Metadata, tt.metadata) {
+				t.Errorf("Metadata does not match. got: %v, want: %v", log.Metadata, tt.metadata)
 			}
 
-			if log.timestamp.IsZero() {
+			if log.Timestamp.IsZero() {
 				t.Errorf("Timestamp is zero")
 			}
 		})

@@ -25,11 +25,11 @@ const (
 )
 
 type log struct {
-	transactionID string
-	message       string
-	level         level
-	timestamp     time.Time
-	metadata      Metadata
+	Timestamp     time.Time `json:"timestamp"`
+	Level         level     `json:"level"`
+	TransactionID string    `json:"transaction_id"`
+	Message       string    `json:"message"`
+	Metadata      Metadata  `json:"metadata"`
 }
 
 func NewPlentyLog(provider Provider) *PlentyLog {
@@ -78,10 +78,10 @@ func (pl *PlentyLog) ErrorWithContext(ctx context.Context, message string, metad
 
 func (pl *PlentyLog) writeLog(ctx context.Context, level level, message string, metadata Metadata) error {
 	log := log{
-		message:   message,
-		level:     level,
-		timestamp: time.Now(),
-		metadata:  metadata,
+		Message:   message,
+		Level:     level,
+		Timestamp: time.Now(),
+		Metadata:  metadata,
 	}
 
 	return pl.provider.Write(ctx, log)

@@ -57,11 +57,11 @@ func (t *Transaction) Rollback() {
 
 func (t *Transaction) addLog(lv level, message string, metadata Metadata) {
 	l := log{
-		transactionID: t.id,
-		message:       message,
-		level:         lv,
-		timestamp:     time.Now(),
-		metadata:      metadata,
+		TransactionID: t.id,
+		Message:       message,
+		Level:         lv,
+		Timestamp:     time.Now(),
+		Metadata:      metadata,
 	}
 
 	t.logs = append(t.logs, l)
