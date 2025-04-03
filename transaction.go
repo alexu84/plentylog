@@ -1,50 +1,68 @@
 package plentylog
 
 import (
+	"context"
 	"time"
 
 	"github.com/rs/xid"
 )
 
-type PlentyLogTransaction struct {
+type Transaction struct {
 	*PlentyLog
 	id   string
-	logs []plentyLog
+	logs []log
 }
 
-func (pl *PlentyLog) NewTransaction() *PlentyLogTransaction {
-	plt := PlentyLogTransaction{
+func (pl *PlentyLog) NewTransaction() *Transaction {
+	t := Transaction{
 		id: xid.New().String(),
 	}
 
-	plt.PlentyLog = pl
+	t.PlentyLog = pl
 
-	return &plt
+	return &t
 }
 
-func (plt *PlentyLogTransaction) Debug(metadata PlentyLogMetadata) error {
-	log := plentyLog{
-		transactionID: plt.id,
-		level:         plentyLogLevelDebug,
+func (t *Transaction) Debug(message string, metadata Metadata) {
+	t.addLog(levelDebug, message, metadata)
+}
+
+func (t *Transaction) Info(message string, metadata Metadata) {
+	t.addLog(levelInfo, message, metadata)
+}
+
+func (t *Transaction) Warning(message string, metadata Metadata) {
+	t.addLog(levelWarning, message, metadata)
+}
+
+func (t *Transaction) Error(message string, metadata Metadata) {
+	t.addLog(levelError, message, metadata)
+}
+
+func (t *Transaction) Commit(ctx context.Context) error {
+	for _, log := range t.logs {
+		err := t.PlentyLog.provider.Write(ctx, log)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (t *Transaction) Rollback() {
+	t.id = ""
+	t.logs = nil
+}
+
+func (t *Transaction) addLog(lv level, message string, metadata Metadata) {
+	l := log{
+		transactionID: t.id,
+		message:       message,
+		level:         lv,
 		timestamp:     time.Now(),
 		metadata:      metadata,
 	}
 
-	plt.logs = append(plt.logs, log)
-
-	return nil
-}
-
-func (plt *PlentyLogTransaction) Commit() error {
-	for _, log := range plt.logs {
-		plt.PlentyLog.provider.Write(log)
-	}
-
-	return nil
-}
-
-func (plt *PlentyLogTransaction) Rollback() error {
-	plt.logs = nil
-
-	return nil
+	t.logs = append(t.logs, l)
 }

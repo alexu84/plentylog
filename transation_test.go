@@ -7,15 +7,15 @@ func TestTransactionDebug(t *testing.T) {
 
 	tr := pl.NewTransaction()
 
-	tr.Debug(PlentyLogMetadata{"test": "test"})
-	tr.Debug(PlentyLogMetadata{"test2": "test2"})
+	tr.Debug("some error", Metadata{"test": "test"})
+	tr.Debug("some error 2", Metadata{"test2": "test2"})
 
-	tr.Commit()
+	tr.Commit(t.Context())
 
 	tr = pl.NewTransaction()
 
-	tr.Debug(PlentyLogMetadata{"123": "123"})
-	tr.Debug(PlentyLogMetadata{"234": "234"})
+	tr.Debug("more error", Metadata{"123": "123"})
+	tr.Debug("more error 2", Metadata{"234": "234"})
 
-	tr.Commit()
+	tr.Commit(t.Context())
 }
