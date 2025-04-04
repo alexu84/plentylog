@@ -81,3 +81,9 @@ esLog.Info("Info message", plentylog.Metadata{"key2": "value2"})
 esLog.Error("Error message", plentylog.Metadata{"key3": "value3"})
 esLog.Warning("Warn message", plentylog.Metadata{"key4": "value4"})
 ```
+
+## UML diagrams to illustrate the main classes and their relationships
+
+![Class diagram](class_diagram.png)
+
+![Sequence](sequence.png)
