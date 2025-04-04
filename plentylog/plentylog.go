@@ -38,7 +38,7 @@ type Record struct {
 	Metadata      Metadata  `json:"metadata"`
 }
 
-func NewLog(opts *LogOptions) *Log {
+func NewLog(opts *LogOptions) (*Log, error) {
 	pl := Log{}
 
 	if opts == nil {
@@ -48,14 +48,18 @@ func NewLog(opts *LogOptions) *Log {
 	if opts.Provider != nil {
 		pl.provider = opts.Provider
 
-		return &pl
+		return &pl, nil
 	}
 
 	if opts.ConfigFile == "" {
 		opts.ConfigFile = "config.yml"
 	}
 
-	c := loadConfig(opts.ConfigFile)
+	c, err := loadConfig(opts.ConfigFile)
+	if err != nil {
+		return nil, err
+	}
+
 	if c != nil {
 		switch c.InternalProvider {
 		case "file":
@@ -66,12 +70,12 @@ func NewLog(opts *LogOptions) *Log {
 			pl.provider = NewProviderCLI()
 		}
 
-		return &pl
+		return &pl, nil
 	}
 
 	pl.provider = NewProviderCLI()
 
-	return &pl
+	return &pl, nil
 }
 
 func (pl *Log) Debug(message string, metadata Metadata) {

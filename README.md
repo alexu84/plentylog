@@ -17,7 +17,10 @@ The plentylog package provides a flexible logging solution in Go, allowing logs 
 Simple logger with internal cli provider and config from file
 
 ```go
-pl := plentylog.NewLog(nil)
+pl, err := plentylog.NewLog(nil)
+if err != nil {
+  panic(err)
+}
 
 pl.Debug("debug", plentylog.Metadata{
   "test":  "test",
@@ -34,7 +37,10 @@ Transactions with internal file provider
 ```go
 provider := plentylog.NewProviderFile(&plentylog.ProviderFileOptions{Format: plentylog.FormatJSON})
 
-log := plentylog.NewLog(&plentylog.LogOptions{Provider: provider})
+log, err := plentylog.NewLog(&plentylog.LogOptions{Provider: provider})
+if err != nil {
+  panic(err)
+}
 
 go func() {
   tr := log.NewTransaction()
@@ -65,7 +71,10 @@ if err != nil {
   panic(err)
 }
 
-esLog := plentylog.NewLog(&plentylog.LogOptions{Provider: esProvider})
+esLog, err := plentylog.NewLog(&plentylog.LogOptions{Provider: esProvider})
+if err != nil {
+  panic(err)
+}
 
 esLog.Debug("Debug message", plentylog.Metadata{"key": "value"})
 esLog.Info("Info message", plentylog.Metadata{"key2": "value2"})

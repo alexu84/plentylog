@@ -44,7 +44,10 @@ func TestTransaction_addLog(t *testing.T) {
 		},
 	}
 
-	pl := NewLog(nil)
+	pl, err := NewLog(&LogOptions{Provider: NewProviderCLI()})
+	if err != nil {
+		t.Fatalf("Failed to create log: %v", err)
+	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

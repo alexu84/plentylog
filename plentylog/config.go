@@ -1,7 +1,6 @@
 package plentylog
 
 import (
-	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -19,21 +18,17 @@ const (
 	configProviderFile configProvider = "file"
 )
 
-func loadConfig(file string) *config {
+func loadConfig(file string) (*config, error) {
 	yamlFile, err := os.ReadFile(file)
 	if err != nil {
-		fmt.Printf("error reading YAML file: %v\n", err)
-
-		return nil
+		return nil, err
 	}
 
 	var c config
 	err = yaml.Unmarshal(yamlFile, &c)
 	if err != nil {
-		fmt.Printf("error unmarshalling YAML file: %v\n", err)
-
-		return nil
+		return nil, err
 	}
 
-	return &c
+	return &c, nil
 }
