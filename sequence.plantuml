@@ -1,0 +1,21 @@
+@startuml
+
+title Sequence: Writing a Log Record
+
+actor Client
+participant Log
+participant Provider
+
+Client -> Log: Debug("Message", metadata)
+activate Log
+
+Log -> Log: writeLog(ctx, levelDebug, message, metadata)
+activate Log
+
+Log -> Provider: Write(ctx, record)
+activate Provider
+Provider --> Log: (record handled)
+deactivate Provider
+
+deactivate Log
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+
+title Class Diagram
+
+!theme plain
+
+interface Provider {
+  + Write(ctx context.Context, record Record)
+}
+
+class Log {
+  - provider Provider
+  - config config
+  + NewLog(opts *LogOptions) : (*Log, error)
+  + Debug(message string, metadata Metadata)
+  + DebugWithContext(ctx context.Context, message string, metadata Metadata)
+  + Info(message string, metadata Metadata)
+  + InfoWithContext(ctx context.Context, message string, metadata Metadata)
+  + Warning(message string, metadata Metadata)
+  + WarningWithContext(ctx context.Context, message string, metadata Metadata)
+  + Error(message string, metadata Metadata)
+  + ErrorWithContext(ctx context.Context, message string, metadata Metadata)
+  - writeLog(ctx context.Context, level level, message string, metadata Metadata)
+}
+
+class LogOptions {
+  - ConfigFile string
+  - Provider Provider
+}
+
+class Record {
+  - Timestamp time.Time
+  - Level level
+  - TransactionID string
+  - Message string
+  - Metadata Metadata
+}
+
+enum level {
+  levelDebug
+  levelInfo
+  levelWarning
+  levelError
+}
+
+class config {
+  - InternalProvider string
+  - FileFormat string
+  ...
+}
+
+Log "1" --> "1" Provider
+Log "1" --> "1" config
+LogOptions "1" --> "0..1" Provider
+@enduml
