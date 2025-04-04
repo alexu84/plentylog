@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// textSerialization serializes a log record into a human-readable string format.
 func textSerialization(l Record) string {
 	var buffer bytes.Buffer
 
@@ -35,6 +36,7 @@ func textSerialization(l Record) string {
 	return buffer.String()
 }
 
+// jsonSerialization serializes a log record into a JSON format.
 func jsonSerialization(l Record) (*string, error) {
 	jsonBytes, err := json.Marshal(l)
 	if err != nil {

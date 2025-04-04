@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+// ProviderFile is a provider for writing logs to a file.
+// It implements the Provider interface from the plentylog package
 type ProviderFile struct {
 	opts   ProviderFileOptions
 	mu     sync.Mutex
@@ -16,6 +18,8 @@ type ProviderFile struct {
 	errors chan error
 }
 
+// ProviderFileOptions are the options for the ProviderFile
+// It contains the file path and the format of the logs.
 type ProviderFileOptions struct {
 	FilePath string
 	Format   format
@@ -28,6 +32,10 @@ const (
 	FormatText format = "text"
 )
 
+// NewProviderFile creates a new ProviderFile instance.
+// It takes an optional ProviderFileOptions struct.
+// If the FilePath field is empty, it defaults to "log.txt".
+// If the Format field is empty, it defaults to text format.
 func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 	if opts == nil {
 		opts = &ProviderFileOptions{}
@@ -53,16 +61,28 @@ func NewProviderFile(opts *ProviderFileOptions) *ProviderFile {
 		errors: make(chan error, 100),
 	}
 
+	// writeLogs in a separate goroutine
+	// to avoid blocking the main thread
+	// and to allow for concurrent writes
 	go pf.writeLogs()
+
+	// displayErrors in a separate goroutine
 	go pf.displayErrors()
 
 	return &pf
 }
 
+// Write writes a log record to a channel.
 func (p *ProviderFile) Write(_ context.Context, l Record) {
 	p.logs <- l
 }
 
+// writeLogs writes logs to a file.
+// It listens for log records on the logs channel
+// and writes them to the specified file.
+// It uses a ticker to periodically check for new logs
+// and write them to the file.
+// It also handles errors by sending them to the errors channel.
 func (p *ProviderFile) writeLogs() {
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
