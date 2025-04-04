@@ -11,12 +11,19 @@ import (
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
+// ElasticProvider is a provider for writing logs to ElasticSearch
+// It implements the Provider interface from the plentylog package
+// and uses the ElasticSearch client to write logs to an ElasticSearch index.
 type ElasticProvider struct {
 	client *elasticsearch.Client
 }
 
+// ElasticProviderOptions are the options for the ElasticProvider
 type ElasticProviderOptions struct{}
 
+// NewElasticProvider creates a new ElasticProvider
+// It takes an optional ElasticProviderOptions struct
+// and returns a pointer to the ElasticProvider and an error if any.
 func NewElasticProvider(options *ElasticProviderOptions) (*ElasticProvider, error) {
 	cert, _ := os.ReadFile("http_ca.crt")
 
@@ -44,6 +51,7 @@ func NewElasticProvider(options *ElasticProviderOptions) (*ElasticProvider, erro
 	return &ep, nil
 }
 
+// Write writes a log record to ElasticSearch
 func (ep *ElasticProvider) Write(ctx context.Context, r plentylog.Record) {
 	fmt.Printf("Writing log to ElasticSearch: %v\n", r)
 
